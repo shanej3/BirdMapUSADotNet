@@ -15,11 +15,11 @@ namespace API.Controllers
             _ebirdService = ebirdService;
         }
 
-        // POST api/Ebird/NearbyObservations
-        [HttpPost("NearbyObservations")]
-        public async Task<ActionResult<IEnumerable<EBirdObservationDto>>> GetNearbyObservations([FromBody] EBirdRequestDto request)
+        // GET api/Ebird/NearbyObservations
+        [HttpGet("NearbyObservations")]
+        public async Task<ActionResult<IEnumerable<EBirdObservationDto>>> GetNearbyObservations([FromQuery] EBirdRequestDto request)
         {
-            // basic validation checks
+            // basic validation checks, maybe not a perfect check for lat/lng but the values cant be zero anyway (in USA)
             if (request.Lat == 0 || request.Lng == 0)
             {
                 return BadRequest("Latitude and Longitude are required.");
@@ -55,9 +55,9 @@ namespace API.Controllers
             }
         }
 
-        // POST api/Ebird/NotableObservations
-        [HttpPost("NotableObservations")]
-        public async Task<ActionResult<IEnumerable<EBirdObservationDto>>> GetNotableObservations([FromBody] EBirdRequestDto request)
+        // GET  api/Ebird/NotableObservations
+        [HttpGet("NotableObservations")]
+        public async Task<ActionResult<IEnumerable<EBirdObservationDto>>> GetNotableObservations([FromQuery] EBirdRequestDto request)
         {
             if (request.Lat == 0 || request.Lng == 0)
             {

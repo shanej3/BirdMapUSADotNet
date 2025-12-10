@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();  // may use; tutorial skips this
+builder.Services.AddCors();
 
 builder.Services.AddHttpClient<IEbirdService, EbirdService>(client =>
 {
@@ -28,6 +29,14 @@ if (app.Environment.IsDevelopment())
 // app.UseHttpsRedirection();
 
 // app.UseAuthorization();
+
+app.UseCors(options =>
+{
+    options.AllowAnyHeader()
+           .AllowAnyMethod()
+           .WithOrigins("http://localhost:5002", "https://localhost:5002", "http://localhost:4200", "https://localhost:4200"); 
+           
+});
 
 app.MapControllers();
 
