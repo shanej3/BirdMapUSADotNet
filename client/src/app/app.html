@@ -1,1 +1,13 @@
-<h2>{{title()}}</h2>
+<div class="card bg-base-100 w-1/2 mx-auto p-10 shadow-xl  border-gray-100 border-8">
+  <ul class="list">
+    @for (bird of birds(); track $index) {
+    <li class="list-row items-center">
+      {{ bird.comName }}
+      <div class="italic">
+        {{ bird.sciName }}
+      </div>
+    </li>
+
+    }
+  </ul>
+</div>
