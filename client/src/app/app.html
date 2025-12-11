@@ -1,13 +1,16 @@
-<div class="card bg-base-100 w-1/2 mx-auto p-10 shadow-xl  border-gray-100 border-8">
-  <ul class="list">
+<div class="w-screen max-w-none m-0">
+  <!-- <ul class="list">
     @for (bird of birds(); track $index) {
     <li class="list-row items-center">
-      {{ bird.comName }}
+        <a href="https://en.wikipedia.org/wiki/{{ bird.comName }}">
+            {{ bird.comName}}
+        </a>
       <div class="italic">
         {{ bird.sciName }}
       </div>
     </li>
 
     }
-  </ul>
+  </ul> -->
+    <app-map/>
 </div>
