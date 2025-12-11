@@ -1,0 +1,36 @@
+<ul class="list bg-base-100 rounded-box shadow-md">
+  @if (birds.length > 0) {
+  <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">Recently Found Birds - Location Name</li>
+  } @for (bird of birds; track $index) {
+  <li class="list-row">
+    <div>{{ bird.howMany }}</div>
+    <div>
+      <div>{{ bird.comName }}</div>
+      <div class="text-xs font-semibold opacity-60 italic">{{ bird.sciName }}</div>
+    </div>
+    <!-- <button class="btn btn-square btn-ghost">
+      <svg class="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor"><path d="M6 3L20 12 6 21 6 3z"></path></g></svg>
+    </button> -->
+    <a href="https://en.wikipedia.org/wiki/{{ bird.comName }}" target="_blank" rel="noopener noreferrer">
+        <button class="btn btn-square btn-ghost" >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="size-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+        />
+      </svg>
+      
+    </button>
+    </a>
+    
+  </li>
+  }
+</ul>

@@ -3,5 +3,8 @@
     <div id="map" class="w-full h-full"></div>
   </div>
 
-  <app-map-nav class="absolute top-3 right-3 z-2000"></app-map-nav>
+  <app-map-card
+  [birds]="birds()"
+    class="absolute top-20 left-20 z-1000 max-h-[75vh] overflow-auto rounded-lg shadow-lg">
+  </app-map-card>
 </div>
