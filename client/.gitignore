@@ -42,3 +42,8 @@ testem.log
 Thumbs.db
 
 .vscode/*
+
+notes.txt
+
+client\notes.txt
+

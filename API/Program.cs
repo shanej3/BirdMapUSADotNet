@@ -15,7 +15,10 @@ builder.Services.AddHttpClient<IEbirdService, EbirdService>(client =>
 {
     client.BaseAddress = new Uri("https://api.ebird.org/v2/");
 });
-
+builder.Services.AddHttpClient<IRidbService, RidbService>(client =>
+{
+    client.BaseAddress = new Uri("https://ridb.recreation.gov/api/v1/");
+});
 
 
 var app = builder.Build();

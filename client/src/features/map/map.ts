@@ -1,7 +1,5 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { AfterViewInit, Component, ElementRef, ViewChild, OnDestroy, OnInit, inject, signal, Input } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import * as L from 'leaflet';
-import { MapNav } from "../map-nav/map-nav";
 import { EbirdService } from '../../app/services/ebird-service';
 import { MapCard } from "../map-card/map-card";
 
@@ -12,15 +10,11 @@ import { MapCard } from "../map-card/map-card";
   imports: [ MapCard],
 })
 export class MapComponent implements OnInit {
-
-  private http = inject(HttpClient);
   private ebirdService = inject(EbirdService);
 
   private map: L.Map | undefined;
   private centroid: L.LatLngExpression = [39.82, -98.59]; // center of usa
   protected circle = L.circle([0,0], {radius : 0});
-
-
 
   protected birds = signal<any>([]);
 
@@ -38,10 +32,8 @@ export class MapComponent implements OnInit {
 
     tiles.addTo(this.map);
     this.circle.addTo(this.map);
-
     
   }
-
   private async onMapClick(e: L.LeafletMouseEvent) {
     const {lat, lng} = e.latlng;
     const radius = 50;

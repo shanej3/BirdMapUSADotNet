@@ -1,0 +1,56 @@
+using API.DTOs;
+using API.Interfaces;
+using API.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace API.Controllers
+{
+    // route: 
+    [Route("api/[controller]")]
+    [ApiController]
+    public class RidbController(IRidbService ridbService) : ControllerBase
+    {
+         private readonly RidbService _ridbService = (RidbService?)ridbService ?? throw new ArgumentNullException(nameof(ridbService));
+
+        // GET api/Ridb/NearbyRecAreas
+        [HttpGet("NearbyRecAreas")]
+        public async Task<ActionResult<IEnumerable<RecArea>>> GetNearbyRecAreas([FromQuery] RidbRequestDto request)
+        {
+            // basic validation checks, maybe not a perfect check for lat/lng but the values cant be zero anyway (in USA)
+            if (request.Lat == 0 || request.Lng == 0)
+            {
+                return BadRequest("Latitude and Longitude are required.");
+            }
+            if (request.RadiusKm <= 0)
+            {
+                return BadRequest("RadiusKm must be greater than zero.");
+            }
+
+            // try to return the actual data
+            try
+            {
+                // lat, lng, radiusKm, put in "Body" of POST call
+                var recAreas = await _ridbService.GetNearbyRecAreasAsync(
+                    request.Lat,
+                    request.Lng,
+                    request.RadiusKm
+                );
+
+                // // return the recareas, assuming any are found
+                if (recAreas.Any())
+                {
+                    return Ok(recAreas);
+                }
+
+                return NotFound("No recent observations found. Try increasing radius or changing coordinates.");
+            }
+
+            // catch server/API/other errors
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error: {ex.Message}");
+            }
+        }
+    }
+}
