@@ -8,6 +8,6 @@ import { RouterLink } from "@angular/router";
   templateUrl: './map-card.html',
   styleUrl: './map-card.css',
 })
-export class MapCard {
+export class BirdsCard {
   @Input() birds: any[] = [];
 }

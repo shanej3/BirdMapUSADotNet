@@ -1,22 +1,28 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import * as L from 'leaflet';
 import { EbirdService } from '../../app/services/ebird-service';
-import { MapCard } from "../map-card/map-card";
+import { BirdsCard } from "../map-card/map-card";
+import { RidbService } from '../../app/services/ridb-service';
+import { RecCard } from "../rec-card/rec-card";
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.html',
   styleUrls: ['./map.css'],
-  imports: [ MapCard],
+  imports: [BirdsCard, RecCard],
 })
 export class MapComponent implements OnInit {
   private ebirdService = inject(EbirdService);
+  private ridbService = inject(RidbService);
 
   private map: L.Map | undefined;
   private centroid: L.LatLngExpression = [39.82, -98.59]; // center of usa
-  protected circle = L.circle([0,0], {radius : 0});
+  protected circle = L.circle([0,0], {radius : 0});  // circle to show radius; one instance
 
   protected birds = signal<any>([]);
+
+  protected recAreas = signal<any>([]);
+  protected rec_area : any;
 
   private initMap(): void {
     this.map = L.map('map', {
@@ -38,9 +44,17 @@ export class MapComponent implements OnInit {
     const {lat, lng} = e.latlng;
     const radius = 50;
       const data = await this.ebirdService.getNearbyBirds(lat, lng, radius);
-      this.birds.set(data);
+      this.birds.set(data);  // signal data sent to map-card (child component)
       this.centerMap(lat, lng);
-      this.createMarker(lat, lng, radius)
+      this.createCircle(lat, lng, radius)  // move the circle marker to new location
+
+      const rec_data = await this.ridbService.getNearbyRecAreas(lat, lng, radius) as any[];
+      // this.recAreas.set(rec_data);
+      for (this.rec_area of rec_data) {
+        var marker = L.marker([this.rec_area.RecAreaLatitude, this.rec_area.RecAreaLongitude])
+          .bindPopup(`<b>${this.rec_area.RecAreaName}</b><br>${this.rec_area.RecAreaDescription}`)
+          .addTo(this.map!);
+      }
     }
 
     constructor() { }
@@ -56,7 +70,7 @@ export class MapComponent implements OnInit {
     this.map?.setView(this.centroid);
   }
 
-  createMarker(lat: number, lng: number, radius: number) { 
+  createCircle(lat: number, lng: number, radius: number) { 
     if (!this.map?.hasLayer(this.circle)) {
       this.circle.addTo(this.map!);
     }

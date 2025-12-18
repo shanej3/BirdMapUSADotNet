@@ -23,7 +23,8 @@ public class RidbService : IRidbService
     public async Task<List<RecArea>> GetNearbyRecAreasAsync(double lat, double lng, int radiusKm)
     {
         // link to Ridb API
-        var url = $"recareas?lat={lat}&lon={lng}&radius={radiusKm}";
+        double radiusMi = radiusKm * 0.621371; // convert km to miles
+        var url = $"recareas?latitude={lat}&longitude={lng}&radius={radiusMi}";
         var data = await _httpClient.GetFromJsonAsync<RidbInitialResponseDto>(url);
         return data?.RecData ?? [];
     }
