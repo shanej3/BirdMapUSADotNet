@@ -5,6 +5,8 @@ import { BirdsCard } from "../map-card/map-card";
 import { RidbService } from '../../app/services/ridb-service';
 import { RecCard } from "../rec-card/rec-card";
 
+// todo: probably move map logic to a service 
+
 @Component({
   selector: 'app-map',
   templateUrl: './map.html',
@@ -49,10 +51,10 @@ export class MapComponent implements OnInit {
       this.createCircle(lat, lng, radius)  // move the circle marker to new location
 
       const rec_data = await this.ridbService.getNearbyRecAreas(lat, lng, radius) as any[];
-      // this.recAreas.set(rec_data);
+      console.log(rec_data);
       for (this.rec_area of rec_data) {
         var marker = L.marker([this.rec_area.RecAreaLatitude, this.rec_area.RecAreaLongitude])
-          .bindPopup(`<b>${this.rec_area.RecAreaName}</b><br>${this.rec_area.RecAreaDescription}`)
+          .bindPopup(`<aref> <b>${this.rec_area.RecAreaName}</b><br>${this.rec_area.RecAreaDescription}`, {maxHeight: 300})
           .addTo(this.map!);
       }
     }

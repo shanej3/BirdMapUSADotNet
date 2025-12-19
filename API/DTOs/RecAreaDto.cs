@@ -6,18 +6,18 @@ namespace API.DTOs;
 public class RecArea
 {
     [JsonPropertyName("RecAreaID")]
-    public string? RecAreaId { get; set; }
+    public string? Id { get; set; }
 
     [JsonPropertyName("RecAreaName")]
-    public string? RecAreaName { get; set; }
+    public string? AreaName { get; set; }
 
     [JsonPropertyName("RecAreaLatitude")]
-    public double? RecAreaLatitude { get; set; }
+    public double? Latitude { get; set; }
 
     [JsonPropertyName("RecAreaLongitude")]
-    public double? RecAreaLongitude { get; set; }
+    public double? Longitude { get; set; }
 
     [JsonPropertyName("RecAreaDescription")]
-    public string? RecAreaDescription { get; set; }
+    public string? Description { get; set; }
     
 }
