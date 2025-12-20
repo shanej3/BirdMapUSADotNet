@@ -1,10 +1,7 @@
-using System;
 using API.DTOs;
 using API.Interfaces;
 
 namespace API.Services;
-
-using Microsoft.Extensions.Configuration; 
 
 public class EbirdService : IEbirdService
 {
@@ -45,5 +42,4 @@ public class EbirdService : IEbirdService
         return data ?? [];
     }
 
-    
 }

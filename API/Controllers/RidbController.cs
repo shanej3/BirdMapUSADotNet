@@ -11,11 +11,10 @@ namespace API.Controllers
     [ApiController]
     public class RidbController(IRidbService ridbService) : ControllerBase
     {
-         private readonly RidbService _ridbService = (RidbService?)ridbService ?? throw new ArgumentNullException(nameof(ridbService));
 
         // GET api/Ridb/NearbyRecAreas
         [HttpGet("NearbyRecAreas")]
-        public async Task<ActionResult<IEnumerable<RecArea>>> GetNearbyRecAreas([FromQuery] RidbRequestDto request)
+        public async Task<ActionResult<IEnumerable<RecArea>>> GetNearbyRecAreas([FromQuery] LocationRequestDto request)
         {
             // basic validation checks, maybe not a perfect check for lat/lng but the values cant be zero anyway (in USA)
             if (request.Lat == 0 || request.Lng == 0)
@@ -31,7 +30,7 @@ namespace API.Controllers
             try
             {
                 // lat, lng, radiusKm, put in "Body" of POST call
-                var recAreas = await _ridbService.GetNearbyRecAreasAsync(
+                var recAreas = await ridbService.GetNearbyRecAreasAsync(
                     request.Lat,
                     request.Lng,
                     request.RadiusKm

@@ -2,12 +2,10 @@ using System;
 
 namespace API.DTOs;
 
-// DTO for requesting Ebird API, "lat", "lng", "radiusKm" are put into the body of API requests
-
-public class EBirdRequestDto
+// DTO for passing location data in requests, previously each service had its own 
+public class LocationRequestDto
 {
     public double Lat { get; set; }
     public double Lng { get; set; }
     public int RadiusKm { get; set; } = 10;
 }
-

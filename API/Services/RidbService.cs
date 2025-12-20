@@ -6,7 +6,6 @@ namespace API.Services;
 
 public class RidbService : IRidbService
 {
-
     private readonly HttpClient _httpClient;
     private readonly string _apiKey;
 

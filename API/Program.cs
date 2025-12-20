@@ -19,6 +19,10 @@ builder.Services.AddHttpClient<IRidbService, RidbService>(client =>
 {
     client.BaseAddress = new Uri("https://ridb.recreation.gov/api/v1/");
 });
+builder.Services.AddHttpClient<INwsService, NwsService>(client =>
+{
+    client.BaseAddress = new Uri("https://api.weather.gov/");
+});
 
 
 var app = builder.Build();

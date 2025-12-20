@@ -6,18 +6,10 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class EbirdController : ControllerBase
+    public class EbirdController(IEbirdService ebirdService) : ControllerBase
     {
-        private readonly IEbirdService _ebirdService;
-
-        public EbirdController(IEbirdService ebirdService)
-        {
-            _ebirdService = ebirdService;
-        }
-
-        // GET api/Ebird/NearbyObservations
         [HttpGet("NearbyObservations")]
-        public async Task<ActionResult<IEnumerable<EBirdObservationDto>>> GetNearbyObservations([FromQuery] EBirdRequestDto request)
+        public async Task<ActionResult<IEnumerable<EBirdObservationDto>>> GetNearbyObservations([FromQuery] LocationRequestDto request)
         {
             // basic validation checks, maybe not a perfect check for lat/lng but the values cant be zero anyway (in USA)
             if (request.Lat == 0 || request.Lng == 0)
@@ -32,8 +24,7 @@ namespace API.Controllers
             // try to return the actual data
             try
             {
-                // lat, lng, radiusKm, put in "Body" of POST call
-                var observations = await _ebirdService.GetNearbyObservationsAsync(
+                var observations = await ebirdService.GetNearbyObservationsAsync(
                     request.Lat,
                     request.Lng,
                     request.RadiusKm
@@ -57,7 +48,7 @@ namespace API.Controllers
 
         // GET  api/Ebird/NotableObservations
         [HttpGet("NotableObservations")]
-        public async Task<ActionResult<IEnumerable<EBirdObservationDto>>> GetNotableObservations([FromQuery] EBirdRequestDto request)
+        public async Task<ActionResult<IEnumerable<EBirdObservationDto>>> GetNotableObservations([FromQuery] LocationRequestDto request)
         {
             if (request.Lat == 0 || request.Lng == 0)
             {
@@ -66,7 +57,7 @@ namespace API.Controllers
 
             try
             {
-                var observations = await _ebirdService.GetNotableObservationsAsync(
+                var observations = await ebirdService.GetNotableObservationsAsync(
                     request.Lat,
                     request.Lng,
                     request.RadiusKm
