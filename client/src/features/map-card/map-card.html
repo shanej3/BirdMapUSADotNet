@@ -1,7 +1,12 @@
 <ul class="list bg-base-100 rounded-box shadow-lg shadow-base-300">
-  @if (birds.length > 0) {
-  <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">Recently Found Birds - Location Name</li>
-  } @for (bird of birds; track $index) {
+  @if (birds.length <= 0) {
+    <li class="p-4 pb-2 text-xs opacity-100 text-red-600 tracking-wide">No birds found here.</li>
+  }
+  @else {
+    <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">Recently Found Birds - Location Name</li>
+  }
+   
+  @for (bird of birds; track $index) {
   <li class="list-row">
     <div>{{ bird.howMany }}</div>
     <div>

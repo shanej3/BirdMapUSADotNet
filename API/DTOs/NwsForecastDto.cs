@@ -2,6 +2,8 @@ using System.Text.Json.Serialization;
 
 namespace API.DTOs;
 
+// NWS forecast periods data
+
 public class NwsForecastDto
 {
     [JsonPropertyName("number")]  // index basically
@@ -23,12 +25,7 @@ public class NwsForecastDto
     public string? DetailedForecast { get; set; }
 
     [JsonPropertyName("probabilityOfPrecipitation")]
-    public ProbabilityMetric? ProbabilityOfPrecipitation { get; set; }
-
-    // [JsonIgnore]
-    // public double? ProbabilityOfPrecipitationValue => ProbabilityOfPrecipitation?.Value;
-
-    
+    public ProbabilityMetric? ProbabilityOfPrecipitation { get; set; }    
 }
 
 public class ProbabilityMetric

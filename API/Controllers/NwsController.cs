@@ -17,7 +17,7 @@ namespace API.Controllers
                 return BadRequest("Latitude and Longitude are required.");
             }
 
-                // try to return the actual data
+            // try to return the actual data
             try
             {
                 var initial_data = await nwsService.GetNwsInitialDataAsync(
@@ -30,7 +30,7 @@ namespace API.Controllers
                     return Ok(initial_data);
                 }
 
-                return NotFound("No recent observations found. Try increasing radius or changing coordinates.");
+                return NotFound("Error: No NWS initial data found.");
             }
 
             // catch server/API/other errors
