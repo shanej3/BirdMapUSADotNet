@@ -1,9 +1,12 @@
-<ul class="list bg-base-100 rounded-box shadow-lg shadow-base-300 opacity-90">
-    @for (day of weatherData; track $index) {
-    <div class="p-4 border-b border-base-300 last:border-0">
-        <div class="font-semibold">{{ day.name }}</div>
-        <div class="text-sm opacity-70">{{ day.detailedForecast }}</div>
-    </div>
-}
+<ul class="list bg-base-100 rounded-box shadow-lg shadow-base-300">
+  <div class="text-2xl flex flex-center align-middle p-4 border-b border-base-300 font-semibold">
+    {{ locationData.properties.relativeLocation.properties.city }},
+    {{ locationData.properties.relativeLocation.properties.state }}
+  </div>
+  @for (day of weatherData; track $index) {
+  <div class="p-4 border-b border-base-300 last:border-0">
+    <div class="font-semibold">{{ day.name }}</div>
+    <div class="text-sm opacity-70">{{ day.detailedForecast }}</div>
+  </div>
+  }
 </ul>
-

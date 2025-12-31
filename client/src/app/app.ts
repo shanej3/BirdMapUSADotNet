@@ -1,15 +1,12 @@
-import { JsonPipe } from '@angular/common';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Component, inject, OnInit, Signal, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { MapComponent } from "../features/map/map";
-import { Navbar } from "../features/navbar/navbar";
 
 // root component
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, JsonPipe, MapComponent, Navbar],
+  imports: [MapComponent],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

@@ -1,13 +1,10 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import * as L from 'leaflet';
-import { EbirdService } from '../../app/services/ebird-service';
 import { BirdsCard } from '../map-card/map-card';
-import { RidbService } from '../../app/services/ridb-service';
 import { RecCard } from '../rec-card/rec-card';
-import { NwsService } from '../../app/services/nws-service';
 import { WeatherCard } from '../weather-card/weather-card';
-
-// todo: probably move map logic to a service
+import { MapMarkersService } from '../../app/services/map/map-markers-service';
+import { MapService } from '../../app/services/map-service';
 
 @Component({
   selector: 'app-map',
@@ -16,21 +13,12 @@ import { WeatherCard } from '../weather-card/weather-card';
   imports: [BirdsCard, RecCard, WeatherCard],
 })
 export class MapComponent implements OnInit {
-  private ebirdService = inject(EbirdService);
-  private ridbService = inject(RidbService);
-  protected nws = inject(NwsService);
+  private mapMarkersService = inject(MapMarkersService);
+  protected mapService = inject(MapService);
 
   private map: L.Map | undefined;
-  private centroid: L.LatLngExpression = [39.82, -98.59]; // center of usa
-  protected circle = L.circle([0, 0], { radius: 0 }); // circle to show radius; one instance
-
-  protected birds = signal<any>([]);
-
-  protected recAreas = signal<any>([]);
-  protected rec_area: any;
-
-  protected weatherData = signal<any>([]);
-  
+  private centroid: L.LatLngExpression = [39.82, -98.59]; // center of USA
+  private readonly DEFAULT_RADIUS = 50; // km
 
   private initMap(): void {
     this.map = L.map('map', {
@@ -45,69 +33,41 @@ export class MapComponent implements OnInit {
     });
 
     tiles.addTo(this.map);
-    this.circle.addTo(this.map);
   }
+
   private async onMapClick(e: L.LeafletMouseEvent) {
     const { lat, lng } = e.latlng;
-    const radius = 50;
 
-    try {
-      const data = await this.ebirdService.getNearbyBirds(lat, lng, radius);
-      this.birds.set(data); // ensure always an array
-    } catch (error) {
-      console.error('Error fetching birds:', error);
-      this.birds.set([]); // Set empty array on error
-    }
+    // Clear previous markers
+    this.mapMarkersService.clearAll();
 
+    // Center map and show search radius
     this.centerMap(lat, lng);
-    this.createCircle(lat, lng, radius); // move the circle marker to new location
+    this.mapMarkersService.createCircle(lat, lng, this.DEFAULT_RADIUS, this.map!);
 
-    const rec_data = (await this.ridbService.getNearbyRecAreas(lat, lng, radius)) as any[];
-    console.log(rec_data);
-    for (this.rec_area of rec_data) {
-      var marker = L.marker([this.rec_area.RecAreaLatitude, this.rec_area.RecAreaLongitude])
-        .bindPopup(
-          `<aref> <b>${this.rec_area.RecAreaName}</b><br>${this.rec_area.RecAreaDescription}`,
-          { maxHeight: 300 }
-        )
-        .addTo(this.map!);
-    }
+    // Fetch all data
+    await this.mapService.fetchLocationData(lat, lng, this.DEFAULT_RADIUS);
 
-    try {
-      const weatherData = await this.nws.getForecastData(lat, lng);
-      this.weatherData.set(weatherData);
-    } catch (error) {
-      console.error('Error fetching weather data:', error);
-      this.weatherData.set([]); // Set empty array on error
+    // Add recreation area markers
+    const recAreas = this.mapService.recAreas();
+    for (const area of recAreas) {
+      await this.mapMarkersService.addRecAreaMarker(
+        area.RecAreaLatitude,
+        area.RecAreaLongitude,
+        area.RecAreaName,
+        area.RecAreaDescription,
+        this.map!
+      );
     }
-    
   }
 
-  constructor() {}
-
   ngOnInit(): void {
-    // map creation and events go here
     this.initMap();
     this.map?.on('click', (e: L.LeafletMouseEvent) => this.onMapClick(e));
   }
 
-  centerMap(lat: number, lng: number) {
+  private centerMap(lat: number, lng: number): void {
     this.centroid = [lat, lng];
     this.map?.setView(this.centroid);
-  }
-
-  createCircle(lat: number, lng: number, radius: number) {
-    if (!this.map?.hasLayer(this.circle)) {
-      this.circle.addTo(this.map!);
-    }
-    this.circle
-      .setLatLng([lat, lng])
-      .setRadius(radius * 1000)
-      .setStyle({
-        color: 'red',
-        fillColor: '#f03',
-        fillOpacity: 0.1,
-        opacity: 0.25,
-      });
   }
 }

@@ -26,7 +26,7 @@ export class NwsService {
           forecastUrl: locationData['properties']['forecast']
         }
       });
-      return firstValueFrom(res);
+      return { locationData, forecastData: await firstValueFrom(res) };
     } catch (error) {
       console.log(error);
       throw error;

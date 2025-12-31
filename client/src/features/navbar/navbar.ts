@@ -3,7 +3,7 @@ import { MapComponent } from "../map/map";
 
 @Component({
   selector: 'app-navbar',
-  imports: [MapComponent],
+  imports: [],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
