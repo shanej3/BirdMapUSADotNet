@@ -1,13 +1,27 @@
+using API.Data;
 using API.Interfaces;
 using API.Services;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
 
 // Add services to the container.
 // I commented out some things the original DatingApp tutorial did, may use them in the future
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
+builder.Services.AddDbContext<AppDbContext>(opt =>
+{
+    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
 builder.Services.AddOpenApi();  // may use; tutorial skips this
 
 // CORS stuff
