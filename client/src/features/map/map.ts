@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import * as L from 'leaflet';
-import { BirdsCard } from '../map-card/map-card';
+import { BirdsCard } from '../bird-card/bird-card';
 import { RecCard } from '../rec-card/rec-card';
 import { WeatherCard } from '../weather-card/weather-card';
 import { MapMarkersService } from '../../app/services/map/map-markers-service';

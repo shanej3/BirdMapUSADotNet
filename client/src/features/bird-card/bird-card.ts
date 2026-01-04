@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { UserBirdsService } from '../../app/services/userbirds-service';
 
 @Component({
-  selector: 'app-map-card',
+  selector: 'app-bird-card',
   imports: [CommonModule],
-  templateUrl: './map-card.html',
-  styleUrl: './map-card.css',
+  templateUrl: './bird-card.html',
+  styleUrl: './bird-card.css',
 })
 export class BirdsCard {
   @Input() birds: any[] = [];

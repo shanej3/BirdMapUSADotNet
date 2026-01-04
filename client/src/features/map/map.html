@@ -3,10 +3,10 @@
     <div id="map" class="w-full h-full"></div>
   </div>
 
-  <app-map-card
+  <app-bird-card
   [birds]="mapService.birds()"
     class="absolute top-20 left-20 z-1000 max-h-[75vh] overflow-auto rounded-lg shadow-lg opacity-80">
-  </app-map-card>
+  </app-bird-card>
   <app-rec-card 
   [recAreas]="mapService.recAreas()"
     class="absolute top-20 right-20 z-1000 max-h-[50vh] max-w-[50vh] overflow-auto rounded-lg shadow-lg opacity-90">
