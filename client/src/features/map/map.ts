@@ -5,6 +5,7 @@ import { RecCard } from '../rec-card/rec-card';
 import { WeatherCard } from '../weather-card/weather-card';
 import { MapMarkersService } from '../../app/services/map/map-markers-service';
 import { MapService } from '../../app/services/map-service';
+import { UserBirdsService } from '../../app/services/userbirds-service';
 
 @Component({
   selector: 'app-map',
@@ -15,6 +16,8 @@ import { MapService } from '../../app/services/map-service';
 export class MapComponent implements OnInit {
   private mapMarkersService = inject(MapMarkersService);
   protected mapService = inject(MapService);
+
+  protected userBirdsService = inject(UserBirdsService);
 
   private map: L.Map | undefined;
   private centroid: L.LatLngExpression = [39.82, -98.59]; // center of USA
@@ -47,6 +50,8 @@ export class MapComponent implements OnInit {
 
     // Fetch all data
     await this.mapService.fetchLocationData(lat, lng, this.DEFAULT_RADIUS);
+
+    await this.userBirdsService.loadFavorites("bob-id");  // for testing
 
     // Add recreation area markers
     const recAreas = this.mapService.recAreas();

@@ -49,6 +49,7 @@ builder.Services.AddHttpClient<INwsService, NwsService>(client =>
     client.BaseAddress = new Uri("https://api.weather.gov/");
 });
 
+builder.Services.AddScoped<IUserBirdService, UserBirdService>();
 
 var app = builder.Build();
 
