@@ -11,4 +11,5 @@ public interface IUserBirdService
     Task<List<UserBirdDto>> GetFavorites(string userId);
     Task<List<UserBirdDto>> GetWantToSee(string userId);
     Task<List<UserBirdDto>> GetFound(string userId);
+    Task<List<UserBirdDto>> DeleteAllUserBirds(string userId);
 }

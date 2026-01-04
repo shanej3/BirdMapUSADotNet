@@ -47,3 +47,5 @@ notes.txt
 
 client\notes.txt
 
+environment.ts
+environment.development.ts

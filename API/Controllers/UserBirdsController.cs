@@ -35,6 +35,12 @@ public class UserBirdsController(IUserBirdService userBirdService) : ControllerB
         return await userBirdService.GetUserBirds(userId);
     }
 
+    [HttpDelete("{userId}")]
+    public async Task<ActionResult<List<UserBirdDto>>> DeleteAllUserBirds(string userId)
+    {
+        return await userBirdService.DeleteAllUserBirds(userId);
+    }
+
     [HttpGet("{userId}/favorites")]
     public async Task<ActionResult<List<UserBirdDto>>> GetFavorites(string userId)
     {

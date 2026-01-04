@@ -85,4 +85,12 @@ public class UserBirdService(AppDbContext context) : IUserBirdService
         }
         return ub;
     }
+
+    public Task<List<UserBirdDto>> DeleteAllUserBirds(string userId)
+    {
+        var userBirds = _context.UserBirds.Where(ub => ub.UserId == userId);
+        _context.UserBirds.RemoveRange(userBirds);
+        _context.SaveChanges();
+        return GetUserBirds(userId);
+    }
 }

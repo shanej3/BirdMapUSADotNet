@@ -13,7 +13,27 @@ export class BirdsCard {
   
   private userBirdsService = inject(UserBirdsService);
 
+  async toggleFavorite(code: string) {
+    await this.userBirdsService.toggleFavorite(code, "bob-id");
+  }
+
+  async toggleFound(code: string) {
+    await this.userBirdsService.toggleFound(code, "bob-id");
+  }
+
+  async toggleWantToSee(code: string) {
+    await this.userBirdsService.toggleWantToSee(code, "bob-id");
+  }
+
   isFavorite(code: string): boolean {
     return this.userBirdsService.isFavorite(code);
+  }
+
+  found(code: string): boolean {
+    return this.userBirdsService.found(code);
+  }
+
+  wantToSee(code: string): boolean {
+    return this.userBirdsService.wantToSee(code);
   }
 }

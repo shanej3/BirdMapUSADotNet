@@ -1,25 +1,74 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserBirdsService {
   private http = inject(HttpClient);
+  private baseUrl = environment.apiUrl;
 
   userBirds = signal<any[]>([]);
 
-  async loadFavorites(userId: string) {
+  async GetUserBirds(userId: string) {
     const res = await firstValueFrom(
       this.http.get<any[]>(
-        `http://localhost:5002/api/userbirds/${encodeURIComponent(userId)}/favorites`
+        `${this.baseUrl}userbirds/${encodeURIComponent(userId)}`
       )
     );
     this.userBirds.set(res);
   }
+  
+  private async performToggle(
+    userId: string,
+    type: 'favorite' | 'found' | 'wantToSee',
+    speciesCode: string
+  ) {
+    const flagKey = type === 'favorite' ? 'isFavorite' : type === 'found' ? 'found' : 'wantToSee';
+    const newValue = !this.getFlag(speciesCode, flagKey);
 
-  isFavorite(speciesCode: string) {
-    return this.userBirds().some((b) => b.speciesCode === speciesCode);
+    await firstValueFrom(
+      this.http.post(
+        `${this.baseUrl}userbirds/${encodeURIComponent(userId)}/${type}/${encodeURIComponent(speciesCode)}?value=${newValue}`,
+        {}
+      )
+    );
+
+    await this.GetUserBirds(userId);
+  }
+
+  async toggleFavorite(speciesCode: string, userId = 'bob-id') {
+    return this.performToggle(userId, 'favorite', speciesCode);
+  }
+
+  async toggleFound(speciesCode: string, userId = 'bob-id') {
+    return this.performToggle(userId, 'found', speciesCode);
+  }
+
+  async toggleWantToSee(speciesCode: string, userId = 'bob-id') {
+    return this.performToggle(userId, 'wantToSee', speciesCode);
+  }
+
+  private getUserBird(speciesCode: string) {
+    return this.userBirds().find((b) => b.speciesCode === speciesCode);
+  }
+
+  private getFlag(speciesCode: string, key: 'isFavorite' | 'found' | 'wantToSee'): boolean {
+    const ub = this.getUserBird(speciesCode);
+    return ub?.[key] ?? false;
+  }
+
+  isFavorite(speciesCode: string): boolean {
+    return this.getFlag(speciesCode, 'isFavorite');
+  }
+
+  found(speciesCode: string): boolean {
+    return this.getFlag(speciesCode, 'found');
+  }
+
+  wantToSee(speciesCode: string): boolean {
+    return this.getFlag(speciesCode, 'wantToSee');
   }
 }

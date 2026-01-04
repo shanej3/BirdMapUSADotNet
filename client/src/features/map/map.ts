@@ -16,7 +16,6 @@ import { UserBirdsService } from '../../app/services/userbirds-service';
 export class MapComponent implements OnInit {
   private mapMarkersService = inject(MapMarkersService);
   protected mapService = inject(MapService);
-
   protected userBirdsService = inject(UserBirdsService);
 
   private map: L.Map | undefined;
@@ -51,7 +50,7 @@ export class MapComponent implements OnInit {
     // Fetch all data
     await this.mapService.fetchLocationData(lat, lng, this.DEFAULT_RADIUS);
 
-    await this.userBirdsService.loadFavorites("bob-id");  // for testing
+    await this.userBirdsService.GetUserBirds("bob-id");  // hard coded user for testing
 
     // Add recreation area markers
     const recAreas = this.mapService.recAreas();

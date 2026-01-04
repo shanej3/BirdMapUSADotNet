@@ -2,19 +2,35 @@
   @if (birds.length <= 0) {
   <li class="p-4 pb-2 text-xs opacity-100 text-red-600 tracking-wide">No birds found here.</li>
   } @else {
-  <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">Recently Found Birds - Location Name</li>
+  <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">Recently Found Birds</li>
   } @for (bird of birds; track $index) {
   <li class="list-row">
     <div>{{ bird.howMany }}</div>
     <div>
-    <div>{{ bird.comName }}</div>
+      <div>{{ bird.comName }}</div>
 
-      
       <div class="text-xs font-semibold opacity-60 italic">{{ bird.sciName }}</div>
     </div>
     <div>
-      <button class="btn btn-square btn-ghost">
+      <button 
+      class="btn btn-square btn-ghost"
+      (click)="toggleFound(bird.speciesCode)">
+        <!-- Plus button -->
+        @if (found(bird.speciesCode)) {
         <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-6"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+        </svg>
+
+        }
+        @else {
+          <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -24,13 +40,20 @@
         >
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
         </svg>
+        }
+        
       </button>
-      <button class="btn btn-square btn-ghost">
-        <!-- Heart button -->
+
+      <!-- Heart button -->
+      <button 
+      class="btn btn-square btn-ghost"
+      (click)="toggleFavorite(bird.speciesCode)"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           [attr.fill]="isFavorite(bird.speciesCode) ? 'currentColor' : 'none'"
           [attr.color]="isFavorite(bird.speciesCode) ? 'red' : 'currentColor'"
+          
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
@@ -43,10 +66,14 @@
           />
         </svg>
       </button>
-      <button class="btn btn-square btn-ghost">
+      <button 
+      class="btn btn-square btn-ghost"
+      (click)="toggleWantToSee(bird.speciesCode)">
+        <!-- Flag button -->
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          fill="none"
+          [attr.fill]="wantToSee(bird.speciesCode) ? 'currentColor' : 'none'"
+          [attr.color]="wantToSee(bird.speciesCode) ? 'green' : 'currentColor'"
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
