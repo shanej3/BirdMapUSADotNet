@@ -6,6 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Services;
 
+// Service for managing user bird data (favorites, want to see, found)
+// Toggle methods create the UserBird entry if it doesn't exist
+// GET methods return lists of UserBirdDto for the user
+// DeleteAllUserBirds removes all UserBird entries for the user (mostly for testing API)
 public class UserBirdService(AppDbContext context) : IUserBirdService
 {
     private readonly AppDbContext _context = context;

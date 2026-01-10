@@ -3,6 +3,7 @@ using API.Interfaces;
 
 namespace API.Services;
 
+// Service for interacting with the eBird API
 public class EbirdService : IEbirdService
 {
     private readonly HttpClient _httpClient;
@@ -11,7 +12,7 @@ public class EbirdService : IEbirdService
     public EbirdService(HttpClient httpClient, IConfiguration configuration)
     {
         _httpClient = httpClient;
-        // Get API Key 
+        // Get API Key from configuration
         _apiKey = configuration["Ebird:ApiKey"] ?? throw new ArgumentNullException("Ebird API Key not found in configuration.");
 
         // API Token header

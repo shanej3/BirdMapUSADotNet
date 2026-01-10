@@ -2,8 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace API.DTOs;
 
-// NWS forecast periods data
-
+// NWS forecast "periods" data
 public class NwsForecastDto
 {
     [JsonPropertyName("number")]  // index basically

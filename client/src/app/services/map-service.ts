@@ -8,16 +8,15 @@ import { NwsService } from './nws-service';
 })
 
 // service for calling all the map-related/location APIs and storing data
-
 export class MapService {
   private ebirdService = inject(EbirdService);
   private ridbService = inject(RidbService);
   private nwsService = inject(NwsService);
 
-  birds = signal<any>([]);
+  birds = signal<any>([]); 
   recAreas = signal<any>([]);
-  locationData = signal<any>(null);  // from first NWS API call
-  weatherData = signal<any>([]);  // from second NWS API call
+  locationData = signal<any>(null);  // first NWS API call
+  weatherData = signal<any>([]);  // second NWS API call
 
   async fetchLocationData(lat: number, lng: number, radius: number) {
     const [birdData, recData, weatherData] = await Promise.allSettled([

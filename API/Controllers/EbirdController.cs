@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    // Controller to fetch Ebird API data (bird findings)
     [ApiController]
     [Route("api/[controller]")]
     public class EbirdController(IEbirdService ebirdService) : ControllerBase

@@ -4,8 +4,61 @@
     {{ locationData.properties.relativeLocation.properties.state }}
   </div>
   @for (day of weatherData; track $index) {
-  <div class="p-4 border-b border-base-300 last:border-0">
-    <div class="font-semibold">{{ day.name }}</div>
+  <div class="p-4 border-b border-base-300 last:border-0 hover:bg-base-200 transition-colors">
+    <div class="flex items-start gap-4 mb-2">
+      <div class="flex-1 min-w-0">
+        <div class="font-semibold text-lg truncate">{{ day.name }}</div>
+        <div class="text-sm font-medium text-green-700 mt-1 truncate">
+          {{ day.shortForecast }}
+        </div>
+      </div>
+
+      <div class="flex-none text-right">
+        <div class="text-2xl font-bold">{{ day.temperature }}°{{ day.temperatureUnit }}</div>
+        @if (day.probabilityOfPrecipitation?.value) {
+        <div class="text-sm text-info flex items-center gap-1 justify-end mt-1">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-cloud-rain"
+          >
+            <line x1="16" y1="13" x2="16" y2="21"></line>
+            <line x1="8" y1="13" x2="8" y2="21"></line>
+            <line x1="12" y1="15" x2="12" y2="23"></line>
+            <path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"></path>
+          </svg>
+          {{ day.probabilityOfPrecipitation.value }}%
+        </div>
+        } @if (day.probabilityOfPrecipitation?.value == 0) {
+          <!-- no rain -->
+        <div class="text-sm flex items-center gap-1 justify-end mt-1">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-droplet"
+          >
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+          </svg>
+          {{ day.probabilityOfPrecipitation.value }}%
+        </div>
+        }
+      </div>
+    </div>
+
     <div class="text-sm opacity-70">{{ day.detailedForecast }}</div>
   </div>
   }

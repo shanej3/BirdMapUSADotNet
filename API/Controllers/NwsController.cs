@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    // Controller to fetch NWS API data (weather)
     [Route("api/[controller]")]
     [ApiController]
     public class NwsController(INwsService nwsService) : ControllerBase

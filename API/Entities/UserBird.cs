@@ -2,6 +2,7 @@ using System;
 
 namespace API.Entities;
 
+// Entity representing a user's bird data (favorites, want to see, found)
 public class UserBird
 {
     public string UserId { get; set; } = string.Empty; 

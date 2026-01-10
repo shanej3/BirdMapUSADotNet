@@ -7,5 +7,5 @@ public class LocationRequestDto
 {
     public double Lat { get; set; }
     public double Lng { get; set; }
-    public int RadiusKm { get; set; } = 10;
+    public int RadiusKm { get; set; }
 }

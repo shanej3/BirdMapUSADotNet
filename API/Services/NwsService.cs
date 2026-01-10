@@ -4,6 +4,11 @@ using API.Interfaces;
 
 namespace API.Services;
 
+// Service for interacting with the NWS API
+// Note to self: NWS API requires two API calls: one to get the forecast URL based on lat/lng,
+// and a second to get the actual forecast data.
+// This service handles both calls.
+// NWS also requires a User-Agent header with contact info
 public class NwsService : INwsService
 {
     private readonly HttpClient? _httpClient;

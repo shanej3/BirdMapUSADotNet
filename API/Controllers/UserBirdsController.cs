@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
+// Controller to manage a user's bird data (favorites, want to see, found)
 [ApiController]
 [Route("api/[controller]")]
 public class UserBirdsController(IUserBirdService userBirdService) : ControllerBase

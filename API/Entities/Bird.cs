@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace API.Entities;
 
+// Entity representing a bird species
 public class Bird
 {
     [Key]

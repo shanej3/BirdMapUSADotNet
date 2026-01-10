@@ -13,6 +13,9 @@ import { UserBirdsService } from '../../app/services/userbirds-service';
   styleUrls: ['./map.css'],
   imports: [BirdsCard, RecCard, WeatherCard],
 })
+
+// Component for displaying the map and handling user interactions
+// May want to split into more components later
 export class MapComponent implements OnInit {
   private mapMarkersService = inject(MapMarkersService);
   protected mapService = inject(MapService);
@@ -49,8 +52,7 @@ export class MapComponent implements OnInit {
 
     // Fetch all data
     await this.mapService.fetchLocationData(lat, lng, this.DEFAULT_RADIUS);
-
-    await this.userBirdsService.GetUserBirds("bob-id");  // hard coded user for testing
+    await this.userBirdsService.GetUserBirds("bob-id");
 
     // Add recreation area markers
     const recAreas = this.mapService.recAreas();

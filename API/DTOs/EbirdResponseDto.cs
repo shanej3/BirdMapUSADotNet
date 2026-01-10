@@ -4,7 +4,6 @@ using System.Text.Json.Serialization;
 namespace API.DTOs;
 
 // DTO for response from Ebird API
-
 public class EBirdObservationDto
 {
     [JsonPropertyName("speciesCode")]

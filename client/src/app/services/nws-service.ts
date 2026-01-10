@@ -5,6 +5,10 @@ import { firstValueFrom } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
+
+// Service for interacting with the NWS API
+// Getlocationdata is first call to the API
+// then NWS gives us a link to forecast data (2nd call)
 export class NwsService {
   private http = inject(HttpClient);
   

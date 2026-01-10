@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace API.DTOs;
 
+// DTO for recreation area data from RIDB API
 public class RecArea
 {
     [JsonPropertyName("RecAreaID")]

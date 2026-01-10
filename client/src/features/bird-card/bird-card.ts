@@ -8,6 +8,9 @@ import { UserBirdsService } from '../../app/services/userbirds-service';
   templateUrl: './bird-card.html',
   styleUrl: './bird-card.css',
 })
+
+// Component for displaying a list of bird findings
+// allows user to set a bird as favorite, found, or want to see
 export class BirdsCard {
   @Input() birds: any[] = [];
   

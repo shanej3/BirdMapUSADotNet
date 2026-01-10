@@ -4,9 +4,12 @@ import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
-})
+}) 
+
+// Service for interacting with the eBird API
 export class EbirdService {
   private http = inject(HttpClient);
+  // Given lat, lng, and a radius in km, return nearby bird observations
   async getNearbyBirds(lat: number, lng: number, radiusKm: number) {
     const res = this.http.get('http://localhost:5002/api/ebird/NearbyObservations', {
       params: {

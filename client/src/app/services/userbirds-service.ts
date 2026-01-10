@@ -22,6 +22,7 @@ export class UserBirdsService {
   }
   
   private async performToggle(
+    // toggle favorite/want to see/found status for a bird
     userId: string,
     type: 'favorite' | 'found' | 'wantToSee',
     speciesCode: string
@@ -60,6 +61,7 @@ export class UserBirdsService {
     return ub?.[key] ?? false;
   }
 
+  // return if bird is marked as favorite/found/want to see
   isFavorite(speciesCode: string): boolean {
     return this.getFlag(speciesCode, 'isFavorite');
   }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    // route: 
+    // Controller to fetch RIDB API data (recreation areas)
     [Route("api/[controller]")]
     [ApiController]
     public class RidbController(IRidbService ridbService) : ControllerBase

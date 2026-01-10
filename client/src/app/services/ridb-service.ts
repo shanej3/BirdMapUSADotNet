@@ -5,6 +5,8 @@ import { firstValueFrom } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
+
+// Service for interacting with the RIDB API
 export class RidbService {
   private http = inject(HttpClient);
   async getNearbyRecAreas(lat: number, lng: number, radiusKm: number) {

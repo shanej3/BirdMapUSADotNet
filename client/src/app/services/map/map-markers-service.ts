@@ -6,16 +6,18 @@ import * as L from 'leaflet';
 })
 
 // service to manage map markers/overlays, such as the radius circle and recareas
-
 export class MapMarkersService {
   private recAreaMarkers: L.Marker[] = [];
   private searchCircle: L.Circle | null = null;
 
+  // shows search radius (circle on map)
   createCircle(lat: number, lng: number, radius: number, map: L.Map): void {
     if (this.searchCircle) {
+      // remove existing circle
       this.searchCircle.remove();
     }
 
+    // new circle + styling
     this.searchCircle = L.circle([lat, lng], {
       radius: radius * 1000, // convert km to meters
       color: '#3388ff',
@@ -32,8 +34,11 @@ export class MapMarkersService {
     map: L.Map
   ): Promise<L.Marker> {
     const marker = L.marker([lat, lng])
+    // marker consists of name and description of recarea
       .addTo(map)
-      .bindPopup(`<b>${name}</b><br><div style="max-height: 300px; overflow-y: auto;">${description}</div>`, {
+      .bindPopup(
+        `<b>${name}</b><br><div style="max-height: 300px; overflow-y: auto;">${description}</div>`,
+        {
       maxWidth: 300
       });
 
@@ -42,6 +47,7 @@ export class MapMarkersService {
   }
 
   clearRecAreaMarkers(): void {
+    // delete all recareas (when you click on a new spot)
     this.recAreaMarkers.forEach(marker => marker.remove());
     this.recAreaMarkers = [];
   }
