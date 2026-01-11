@@ -1,14 +1,39 @@
 <!-- Component to display birds and mark them as found, favorite, or want to see -->
 
 <ul class="list bg-base-100 rounded-box shadow-lg shadow-base-300">
-  @if (birds.length <= 0) {
+  @if (displayBirds().length <= 0) {
   <!-- check if any birds have been found -->
   <li class="p-4 pb-2 text-xs opacity-100 text-red-600 tracking-wide">No birds found here.</li>
   } @else {
-  <div class="text-2xl flex flex-center align-middle p-4 border-b border-base-300 font-semibold">
-    Recently Found Birds
+  <div class="text-2xl flex flex-col sm:flex-row sm:items-center gap-2 p-4 border-b border-base-300 font-semibold">
+    <div class="shrink-0">Recently Found Birds</div>
+
+    <div class="flex flex-wrap gap-2 sm:ml-auto justify-center sm:justify-end w-full sm:w-auto">
+      <button 
+        class="btn btn-sm" 
+        [class.btn-primary]="showOnlyFavorites()"
+        [class.btn-ghost]="!showOnlyFavorites()"
+        (click)="toggleFilter('favorites')">
+         Only Favorites
+      </button>
+      <button 
+        class="btn btn-sm" 
+        [class.btn-primary]="showOnlyWantToSee()"
+        [class.btn-ghost]="!showOnlyWantToSee()"
+        (click)="toggleFilter('wantToSee')">
+       Only Want to See
+      </button>
+      <button 
+        class="btn btn-sm" 
+        [class.btn-error]="hideFound()"
+        [class.btn-ghost]="!hideFound()"
+        (click)="toggleFilter('hideFound')">
+         Hide Found
+      </button>
+    </div>
   </div>
-  } @for (bird of birds; track $index) {
+    
+  } @for (bird of displayBirds(); track $index) {
   <li class="p-4 border-b border-base-300 last:border-0 hover:bg-base-200 transition-colors">
     <div class="flex items-start gap-4 mb-2">
       <div class="flex-1 min-w-0">
@@ -21,7 +46,7 @@
 
         <button class="btn btn-square btn-ghost" (click)="toggleFound(bird.speciesCode)">
           <!-- Plus button -->
-          @if (found(bird.speciesCode)) {
+          @if (found(bird)) {
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -51,8 +76,8 @@
         <button class="btn btn-square btn-ghost" (click)="toggleFavorite(bird.speciesCode)">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            [attr.fill]="isFavorite(bird.speciesCode) ? 'currentColor' : 'none'"
-            [attr.color]="isFavorite(bird.speciesCode) ? 'red' : 'currentColor'"
+            [attr.fill]="isFavorite(bird) ? 'currentColor' : 'none'"
+            [attr.color]="isFavorite(bird) ? 'red' : 'currentColor'"
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
@@ -69,8 +94,8 @@
           <!-- Flag button -->
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            [attr.fill]="wantToSee(bird.speciesCode) ? 'currentColor' : 'none'"
-            [attr.color]="wantToSee(bird.speciesCode) ? 'green' : 'currentColor'"
+            [attr.fill]="wantToSee(bird) ? 'currentColor' : 'none'"
+            [attr.color]="wantToSee(bird) ? 'green' : 'currentColor'"
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"

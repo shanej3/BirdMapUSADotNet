@@ -6,12 +6,15 @@ import { environment } from '../../environments/environment.development';
 @Injectable({
   providedIn: 'root',
 })
+
+// Service to manage user bird data (favorite, found, want to see)
 export class UserBirdsService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
 
   userBirds = signal<any[]>([]);
 
+  // retrieve user bird data from backend and updates the userBirds signal
   async GetUserBirds(userId: string) {
     const res = await firstValueFrom(
       this.http.get<any[]>(
@@ -20,7 +23,7 @@ export class UserBirdsService {
     );
     this.userBirds.set(res);
   }
-  
+
   private async performToggle(
     // toggle favorite/want to see/found status for a bird
     userId: string,
