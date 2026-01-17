@@ -10,6 +10,16 @@ export class MapMarkersService {
   private recAreaMarkers: L.Marker[] = [];
   private searchCircle: L.Circle | null = null;
 
+  private customIcon = L.icon({
+    iconUrl: 'trailhead.png',
+    iconSize: [32, 72],
+    iconAnchor: [16, 72], // bottom-center of the icon
+    popupAnchor: [0, -72], // popup opens above the icon
+    shadowUrl: 'trailhead_shadow.png',
+    shadowSize: [32, 72],
+    shadowAnchor: [16, 72],
+  })
+
   // shows search radius (circle on map)
   createCircle(lat: number, lng: number, radius: number, map: L.Map): void {
     if (this.searchCircle) {
@@ -33,7 +43,7 @@ export class MapMarkersService {
     description: string,
     map: L.Map
   ): Promise<L.Marker> {
-    const marker = L.marker([lat, lng])
+    const marker = L.marker([lat, lng], { icon: this.customIcon })
     // marker consists of name and description of recarea
       .addTo(map)
       .bindPopup(
