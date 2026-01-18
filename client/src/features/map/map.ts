@@ -24,6 +24,7 @@ export class MapComponent implements OnInit {
   private map: L.Map | undefined;
   private centroid: L.LatLngExpression = [39.82, -98.59]; // center of USA
   private readonly DEFAULT_RADIUS = 50; // km
+  protected lastLocation: { lat: number; lng: number; radius: number } | null = null;
 
   private initMap(): void {
     this.map = L.map('map', {
@@ -42,6 +43,10 @@ export class MapComponent implements OnInit {
 
   private async onMapClick(e: L.LeafletMouseEvent) {
     const { lat, lng } = e.latlng;
+
+    // Location stored for fetching birds (switching from recent to notable)
+    // caching would be good to implement soon
+    this.lastLocation = { lat, lng, radius: this.DEFAULT_RADIUS };
 
     // Clear previous markers
     this.mapMarkersService.clearAll();

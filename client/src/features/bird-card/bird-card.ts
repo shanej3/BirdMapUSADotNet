@@ -1,6 +1,7 @@
 import { Component, computed, inject, Input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserBirdsService } from '../../app/services/userbirds-service';
+import { MapService } from '../../app/services/map-service';
 
 @Component({
   selector: 'app-bird-card',
@@ -16,9 +17,11 @@ export class BirdsCard {
   @Input() set birds(value: any[]) {
     this._birds.set(value);
   }
+  @Input() lastLocation: { lat: number; lng: number; radius: number } | null = null;
   
   private _birds = signal<any[]>([]);
   private userBirdsService = inject(UserBirdsService);
+  protected mapService = inject(MapService);
 
   // Filter toggles
   showOnlyFavorites = signal(false);
@@ -45,6 +48,17 @@ export class BirdsCard {
       hideFound: this.hideFound
     };
     filters[filter].update(v => !v);  // toggle selected filter (flip the boolean value)
+  }
+
+  async toggleObservationType() {
+    if (!this.lastLocation) return;
+    
+    this.mapService.toggleObservationType();
+    await this.mapService.fetchBirdsOnly(
+      this.lastLocation.lat,
+      this.lastLocation.lng,
+      this.lastLocation.radius
+    );
   }
 
   async toggleFavorite(code: string) {
