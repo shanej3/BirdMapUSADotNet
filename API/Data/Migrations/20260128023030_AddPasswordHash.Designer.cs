@@ -2,6 +2,7 @@
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260128023030_AddPasswordHash")]
+    partial class AddPasswordHash
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.1");
@@ -32,6 +35,26 @@ namespace API.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "bob-id",
+                            PasswordHash = "$2a$11$8.XW7z3qKxJL1LL1V8YwMuJXhYD8E8E6H8L3/9nq3RN0D7C6JvT3K",
+                            UserName = "Bob"
+                        },
+                        new
+                        {
+                            Id = "shane-id",
+                            PasswordHash = "$2a$11$8.XW7z3qKxJL1LL1V8YwMuJXhYD8E8E6H8L3/9nq3RN0D7C6JvT3K",
+                            UserName = "Shane"
+                        },
+                        new
+                        {
+                            Id = "john-id",
+                            PasswordHash = "$2a$11$8.XW7z3qKxJL1LL1V8YwMuJXhYD8E8E6H8L3/9nq3RN0D7C6JvT3K",
+                            UserName = "John"
+                        });
                 });
 
             modelBuilder.Entity("API.Entities.Bird", b =>

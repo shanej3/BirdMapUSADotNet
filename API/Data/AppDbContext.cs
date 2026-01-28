@@ -23,11 +23,5 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         // index for performance
         modelBuilder.Entity<UserBird>().HasIndex(ub => ub.UserId);
 
-        // test seed data, default user is bob-id for now
-        modelBuilder.Entity<AppUser>().HasData(
-            new AppUser { Id = "bob-id", UserName = "Bob" },
-            new AppUser { Id = "shane-id", UserName = "Shane" },
-            new AppUser { Id = "john-id", UserName = "John" }
-        );
     }
 }
