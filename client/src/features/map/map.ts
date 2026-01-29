@@ -24,9 +24,8 @@ export class MapComponent implements OnInit {
   protected userBirdsService = inject(UserBirdsService);
   protected accountService = inject(AccountService);
 
-  private map: L.Map | undefined;
+  protected map: L.Map | undefined;
   private centroid: L.LatLngExpression = [39.82, -98.59]; // center of USA
-  private readonly DEFAULT_RADIUS = 50; // km
   protected lastLocation: { lat: number; lng: number; radius: number } | null = null;
 
   private initMap(): void {
@@ -46,20 +45,21 @@ export class MapComponent implements OnInit {
 
   private async onMapClick(e: L.LeafletMouseEvent) {
     const { lat, lng } = e.latlng;
+    const radius = this.mapService.radiusKm();
 
     // Location stored for fetching birds (switching from recent to notable)
     // caching would be good to implement soon
-    this.lastLocation = { lat, lng, radius: this.DEFAULT_RADIUS };
+    this.lastLocation = { lat, lng, radius };
 
     // Clear previous markers
     this.mapMarkersService.clearAll();
 
     // Center map and show search radius
     this.centerMap(lat, lng);
-    this.mapMarkersService.createCircle(lat, lng, this.DEFAULT_RADIUS, this.map!);
+    this.mapMarkersService.createCircle(lat, lng, radius, this.map!);
 
     // Fetch all data
-    await this.mapService.fetchLocationData(lat, lng, this.DEFAULT_RADIUS);
+    await this.mapService.fetchLocationData(lat, lng, radius);
     await this.userBirdsService.GetUserBirds(this.accountService.currentUser()?.id || '');
 
     // Add recreation area markers
@@ -78,6 +78,21 @@ export class MapComponent implements OnInit {
   ngOnInit(): void {
     this.initMap();
     this.map?.on('click', (e: L.LeafletMouseEvent) => this.onMapClick(e));
+    
+    // radius change handler
+    this.mapService.onRadiusChange = () => this.updateCircle();
+  }
+
+  private updateCircle(): void {
+    // creates new circle when radius changes
+    if (!this.lastLocation || !this.map) return;
+    
+    this.mapMarkersService.createCircle(
+      this.lastLocation.lat,
+      this.lastLocation.lng,
+      this.mapService.radiusKm(),
+      this.map
+    );
   }
 
   private centerMap(lat: number, lng: number): void {

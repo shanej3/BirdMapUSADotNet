@@ -20,6 +20,10 @@ export class MapService {
   locationData = signal<any>(null);  // first NWS API call
   weatherData = signal<any>([]);  // second NWS API call
   observationType = signal<'recent' | 'notable'>('recent');  // track which type of observations to fetch
+  radiusKm = signal<number>(50);  // search radius in kilometers (might convert to miles eventually)
+  
+  // Event handler for radius changing (updating circle)
+  onRadiusChange: (() => void) | null = null;
 
   // combine 'userBirds' (birds flagged by user) and 'birds' (birds from Ebird API)
   combinedBirds = computed(() => {

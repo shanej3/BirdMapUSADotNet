@@ -20,7 +20,7 @@ export class BirdsCard {
   }
   @Input() lastLocation: { lat: number; lng: number; radius: number } | null = null;
   
-  private _birds = signal<any[]>([]);
+  protected _birds = signal<any[]>([]);
   private userBirdsService = inject(UserBirdsService);
   protected mapService = inject(MapService);
   protected accountService = inject(AccountService);
@@ -33,11 +33,19 @@ export class BirdsCard {
 
   // Filtered list of birds to display
   displayBirds = computed(() => {
-    return this._birds().filter(b => {
+    const filtered = this._birds().filter(b => {
       if (this.showOnlyFavorites() && !b.isFavorite) return false;
       if (this.showOnlyFound() && !b.found) return false;
       if (this.showOnlyWantToSee() && !b.wantToSee) return false;
       if (this.hideFound() && b.found) return false;
+      return true;
+    });
+    
+    // Remove duplicates, since ebird API often returns duplicates for notable observations
+    const seen = new Set();
+    return filtered.filter(bird => {
+      if (seen.has(bird.speciesCode)) return false;
+      seen.add(bird.speciesCode);
       return true;
     });
   });
@@ -50,6 +58,38 @@ export class BirdsCard {
       hideFound: this.hideFound
     };
     filters[filter].update(v => !v);  // toggle selected filter (flip the boolean value)
+  }
+
+  onRadiusDrag(event: Event) {
+    if (!this.lastLocation) return;
+    
+    const input = event.target as HTMLInputElement;
+    const newRadiusKm = parseInt(input.value);
+    
+    this.mapService.radiusKm.set(newRadiusKm);
+    this.lastLocation.radius = newRadiusKm;
+    
+    // Notify map component to update circle
+    if (this.mapService.onRadiusChange) {
+      this.mapService.onRadiusChange();
+    }
+  }
+
+  onRadiusRelease(event: Event) {
+    this.refetchWithNewRadius();
+  }
+
+  private async refetchWithNewRadius() {
+    if (!this.lastLocation) return;
+    
+    const radius = this.mapService.radiusKm();
+    
+    // Refetch data with new radius
+    await this.mapService.fetchLocationData(
+      this.lastLocation.lat,
+      this.lastLocation.lng,
+      radius
+    );
   }
 
   async toggleObservationType() {
