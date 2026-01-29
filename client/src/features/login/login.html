@@ -1,0 +1,38 @@
+<div>
+  @if (!accountService.currentUser()) {
+    <button 
+      (click)="toggleLogin()" 
+      class="btn btn-neutral">
+      {{ isOpen() ? 'Close' : 'Login' }}
+    </button>
+
+    @if (isOpen()) {
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 mt-2">
+        <legend class="fieldset-legend">{{ isRegisterMode() ? 'Register' : 'Login' }}</legend>
+
+        <label class="label">Username</label>
+        <input type="text" formControlName="userName" class="input" placeholder="Username" />
+
+        <label class="label">Password</label>
+        <input type="password" formControlName="password" class="input" placeholder="Password" />
+
+        @if (errorMessage()) {
+          <p class="text-error text-sm mt-2">{{ errorMessage() }}</p>
+        }
+
+        <button type="submit" class="btn btn-neutral mt-4" [disabled]="loginForm.invalid">
+          {{ isRegisterMode() ? 'Register' : 'Login' }}
+        </button>
+        
+        <button type="button" (click)="toggleMode()" class="btn btn-ghost btn-sm mt-2 w-full">
+          {{ isRegisterMode() ? 'Already have an account? Login' : 'Need an account? Register' }}
+        </button>
+      </form>
+    }
+  } @else {
+    <div class="flex flex-col gap-2">
+      <p class="text-sm">Hello, {{ accountService.currentUser()?.userName }}!</p>
+      <button (click)="onLogout()" class="btn btn-neutral btn-sm">Logout</button>
+    </div>
+  }
+</div>

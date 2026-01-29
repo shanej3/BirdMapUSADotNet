@@ -2,6 +2,7 @@ import { Component, computed, inject, Input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserBirdsService } from '../../app/services/userbirds-service';
 import { MapService } from '../../app/services/map-service';
+import { AccountService } from '../../app/services/account-service';
 
 @Component({
   selector: 'app-bird-card',
@@ -22,6 +23,7 @@ export class BirdsCard {
   private _birds = signal<any[]>([]);
   private userBirdsService = inject(UserBirdsService);
   protected mapService = inject(MapService);
+  protected accountService = inject(AccountService);
 
   // Filter toggles
   showOnlyFavorites = signal(false);
@@ -62,15 +64,15 @@ export class BirdsCard {
   }
 
   async toggleFavorite(code: string) {
-    await this.userBirdsService.toggleFavorite(code, "bob-id");
+    await this.userBirdsService.toggleFavorite(code, this.accountService.currentUser()?.id || '');
   }
 
   async toggleFound(code: string) {
-    await this.userBirdsService.toggleFound(code, "bob-id");
+    await this.userBirdsService.toggleFound(code, this.accountService.currentUser()?.id || '');
   }
 
   async toggleWantToSee(code: string) {
-    await this.userBirdsService.toggleWantToSee(code, "bob-id");
+    await this.userBirdsService.toggleWantToSee(code, this.accountService.currentUser()?.id || '');
   }
 
   

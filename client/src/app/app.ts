@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { MapComponent } from "../features/map/map";
+import { AccountService } from './services/account-service';
 
 // root component
 
@@ -12,9 +13,12 @@ import { MapComponent } from "../features/map/map";
 })
 export class App implements OnInit {
   private http = inject(HttpClient);
+  private accountService = inject(AccountService);
   protected title = signal('BirdMapUSA');
 
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.accountService.loadUserFromStorage();
+  }
   
 }

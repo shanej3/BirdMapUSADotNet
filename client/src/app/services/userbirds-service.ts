@@ -43,15 +43,15 @@ export class UserBirdsService {
     await this.GetUserBirds(userId);
   }
 
-  async toggleFavorite(speciesCode: string, userId = 'bob-id') {
+  async toggleFavorite(speciesCode: string, userId: string) {
     return this.performToggle(userId, 'favorite', speciesCode);
   }
 
-  async toggleFound(speciesCode: string, userId = 'bob-id') {
+  async toggleFound(speciesCode: string, userId: string) {
     return this.performToggle(userId, 'found', speciesCode);
   }
 
-  async toggleWantToSee(speciesCode: string, userId = 'bob-id') {
+  async toggleWantToSee(speciesCode: string, userId: string) {
     return this.performToggle(userId, 'wantToSee', speciesCode);
   }
 
