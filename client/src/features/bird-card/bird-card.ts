@@ -1,8 +1,9 @@
-import { Component, computed, inject, Input, signal } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserBirdsService } from '../../app/services/userbirds-service';
 import { MapService } from '../../app/services/map-service';
 import { AccountService } from '../../app/services/account-service';
+import { BirdObservation, LocationWithRadius } from '../../types/api.types';
 
 @Component({
   selector: 'app-bird-card',
@@ -15,12 +16,9 @@ import { AccountService } from '../../app/services/account-service';
 // allows user to set a bird as favorite, found, or want to see and filter the list with those flags
 
 export class BirdsCard {
-  @Input() set birds(value: any[]) {
-    this._birds.set(value);
-  }
-  @Input() lastLocation: { lat: number; lng: number; radius: number } | null = null;
+  birds = input<BirdObservation[]>([]);
+  lastLocation = input<LocationWithRadius | null>(null);
   
-  protected _birds = signal<any[]>([]);
   private userBirdsService = inject(UserBirdsService);
   protected mapService = inject(MapService);
   protected accountService = inject(AccountService);
@@ -33,7 +31,7 @@ export class BirdsCard {
 
   // Filtered list of birds to display
   displayBirds = computed(() => {
-    const filtered = this._birds().filter(b => {
+    const filtered = this.birds().filter(b => {
       if (this.showOnlyFavorites() && !b.isFavorite) return false;
       if (this.showOnlyFound() && !b.found) return false;
       if (this.showOnlyWantToSee() && !b.wantToSee) return false;
@@ -61,13 +59,13 @@ export class BirdsCard {
   }
 
   onRadiusDrag(event: Event) {
-    if (!this.lastLocation) return;
+    if (!this.lastLocation()) return;
     
     const input = event.target as HTMLInputElement;
     const newRadiusKm = parseInt(input.value);
     
     this.mapService.radiusKm.set(newRadiusKm);
-    this.lastLocation.radius = newRadiusKm;
+    this.lastLocation()!.radius = newRadiusKm;
     
     // Notify map component to update circle
     if (this.mapService.onRadiusChange) {
@@ -80,26 +78,26 @@ export class BirdsCard {
   }
 
   private async refetchWithNewRadius() {
-    if (!this.lastLocation) return;
+    if (!this.lastLocation()) return;
     
     const radius = this.mapService.radiusKm();
     
     // Refetch data with new radius
     await this.mapService.fetchLocationData(
-      this.lastLocation.lat,
-      this.lastLocation.lng,
+      this.lastLocation()!.lat,
+      this.lastLocation()!.lng,
       radius
     );
   }
 
   async toggleObservationType() {
-    if (!this.lastLocation) return;
+    if (!this.lastLocation()) return;
     
     this.mapService.toggleObservationType();
     await this.mapService.fetchBirdsOnly(
-      this.lastLocation.lat,
-      this.lastLocation.lng,
-      this.lastLocation.radius
+      this.lastLocation()!.lat,
+      this.lastLocation()!.lng,
+      this.lastLocation()!.radius
     );
   }
 
@@ -116,15 +114,15 @@ export class BirdsCard {
   }
 
   
-  isFavorite(bird: any): boolean {
+  isFavorite(bird: BirdObservation): boolean {
     return bird.isFavorite ?? false;
   }
 
-  found(bird: any): boolean {
+  found(bird: BirdObservation): boolean {
     return bird.found ?? false;
   }
 
-  wantToSee(bird: any): boolean {
+  wantToSee(bird: BirdObservation): boolean {
     return bird.wantToSee ?? false;
   }
 }

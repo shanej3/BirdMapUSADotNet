@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
+import { RecArea } from '../../types/api.types';
 
 @Component({
   selector: 'app-rec-card',
@@ -7,5 +8,5 @@ import { Component, Input } from '@angular/core';
   styleUrl: './rec-card.css',
 })
 export class RecCard {
-  @Input() recAreas: any[] = [];
+  recAreas = input<RecArea[]>([]);
 }

@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
+import { WeatherForecast, LocationData } from '../../types/api.types';
 
 @Component({
   selector: 'app-weather-card',
@@ -9,6 +10,6 @@ import { Component, Input } from '@angular/core';
 
 // Component for displaying weather information
 export class WeatherCard {
-  @Input() weatherData: any[] = [];
-  @Input() locationData: any = null;
+  weatherData = input<WeatherForecast[]>([]);
+  locationData = input<LocationData | null>(null);
 }

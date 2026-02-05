@@ -1,7 +1,7 @@
 <!-- Component to display birds and mark them as found, favorite, or want to see -->
 
 <ul class="list bg-base-100 rounded-box shadow-lg shadow-base-300">
-  @if (_birds().length > 0) {
+  @if (lastLocation()) {
   <div class="flex flex-col gap-3 p-4 border-b border-base-300">
     <div class="text-2xl font-semibold text-center">
       {{ mapService.observationType() === 'recent' ? 'Recently Found Birds' : 'Notable Bird Sightings' }}
@@ -19,7 +19,7 @@
         [value]="mapService.radiusKm()" 
         (input)="onRadiusDrag($event)"
         (change)="onRadiusRelease($event)"
-        [disabled]="!lastLocation"
+        [disabled]="!lastLocation()"
         class="range range-xs range-primary" 
         step="5" />
     </div>
@@ -30,7 +30,7 @@
         [class.btn-accent]="mapService.observationType() === 'notable'"
         [class.btn-ghost]="mapService.observationType() === 'recent'"
         (click)="toggleObservationType()"
-        [disabled]="!lastLocation">
+        [disabled]="!lastLocation()">
         <span class="text-sm">🐦</span>
         {{ mapService.observationType() === 'recent' ? 'Notable' : 'Recent' }}
       </button>
@@ -65,9 +65,9 @@
   </div>
   }
 
-  @if (displayBirds().length === 0 && _birds().length === 0) {
+  @if (displayBirds().length === 0 && birds().length === 0) {
   <!-- No birds found in this location -->
-  <li class="p-4 pb-2 text-xs opacity-100 text-red-600 tracking-wide">No birds found here.</li>
+  <li class="p-4 pb-2 text-xs opacity-100 text-red-600 tracking-wide text-center">No birds found here. Try adjusting the radius or filters.</li>
   } @else if (displayBirds().length === 0) {
   <!-- Birds are found but none match current filters -->
   <li class="p-4 pb-2 text-xs opacity-60 tracking-wide text-center">No birds match the current filters. Try adjusting the filters above.</li>

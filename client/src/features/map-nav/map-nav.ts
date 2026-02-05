@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 @Component({
   selector: 'app-map-nav',
@@ -7,9 +7,9 @@ import { Component } from '@angular/core';
   styleUrl: './map-nav.css',
 })
 export class MapNav {
-  protected nearby = true;
+  protected nearby = signal(true);
   protected toggle(): void {
-    this.nearby = !this.nearby;
-    console.log("Nearby set to: " + this.nearby);
+    this.nearby.update(v => !v);
+    console.log("Nearby set to: " + this.nearby());
   }
 }

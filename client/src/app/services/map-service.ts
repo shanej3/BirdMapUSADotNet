@@ -3,6 +3,7 @@ import { EbirdService } from './ebird-service';
 import { RidbService } from './ridb-service';
 import { NwsService } from './nws-service';
 import { UserBirdsService } from './userbirds-service';
+import { BirdObservation, RecArea, WeatherForecast, LocationData } from '../../types/api.types';
 
 @Injectable({
   providedIn: 'root',
@@ -15,10 +16,10 @@ export class MapService {
   private nwsService = inject(NwsService);
   private userBirdsService = inject(UserBirdsService);
 
-  birds = signal<any>([]); 
-  recAreas = signal<any>([]);
-  locationData = signal<any>(null);  // first NWS API call
-  weatherData = signal<any>([]);  // second NWS API call
+  birds = signal<BirdObservation[]>([]); 
+  recAreas = signal<RecArea[]>([]);
+  locationData = signal<LocationData | null>(null);  // first NWS API call
+  weatherData = signal<WeatherForecast[]>([]);  // second NWS API call
   observationType = signal<'recent' | 'notable'>('recent');  // track which type of observations to fetch
   radiusKm = signal<number>(50);  // search radius in kilometers (might convert to miles eventually)
   
@@ -30,7 +31,7 @@ export class MapService {
     const birds = this.birds();
     const userBirds = this.userBirdsService.userBirds();
     
-    return birds.map((bird: any) => {
+    return birds.map((bird) => {
       const userBird = userBirds.find(ub => ub.speciesCode === bird.speciesCode);
       return {
         ...bird,
@@ -51,12 +52,12 @@ export class MapService {
       this.nwsService.getForecastData(lat, lng),
     ]);
 
-    this.birds.set(birdData.status === 'fulfilled' ? birdData.value : []);
-    this.recAreas.set(recData.status === 'fulfilled' ? recData.value : []);
+    this.birds.set(birdData.status === 'fulfilled' ? birdData.value as BirdObservation[] : []);
+    this.recAreas.set(recData.status === 'fulfilled' ? recData.value as RecArea[] : []);
     this.locationData.set(
-      weatherData.status === 'fulfilled' ? weatherData.value.locationData : null
+      weatherData.status === 'fulfilled' ? weatherData.value.locationData as LocationData : null
     );
-    this.weatherData.set(weatherData.status === 'fulfilled' ? weatherData.value.forecastData : []);
+    this.weatherData.set(weatherData.status === 'fulfilled' ? weatherData.value.forecastData as WeatherForecast[] : []);
   }
 
   // Fetch only bird data (for switching between recent/notable observations)
@@ -66,7 +67,7 @@ export class MapService {
         ? await this.ebirdService.getNearbyBirds(lat, lng, radius)
         : await this.ebirdService.getNotableBirds(lat, lng, radius);
       
-      this.birds.set(birdData);
+      this.birds.set(birdData as BirdObservation[]);
     } catch (error) {
       console.error('Error fetching birds:', error);
       this.birds.set([]);

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment.development';
+import { UserBird } from '../../types/api.types';
 
 @Injectable({
   providedIn: 'root',
@@ -12,12 +13,12 @@ export class UserBirdsService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
 
-  userBirds = signal<any[]>([]);
+  userBirds = signal<UserBird[]>([]);
 
   // retrieve user bird data from backend and updates the userBirds signal
   async GetUserBirds(userId: string) {
     const res = await firstValueFrom(
-      this.http.get<any[]>(
+      this.http.get<UserBird[]>(
         `${this.baseUrl}userbirds/${encodeURIComponent(userId)}`
       )
     );

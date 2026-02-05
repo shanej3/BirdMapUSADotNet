@@ -8,6 +8,7 @@ import { MapService } from '../../app/services/map-service';
 import { UserBirdsService } from '../../app/services/userbirds-service';
 import { AccountService } from '../../app/services/account-service';
 import { Login } from "../login/login";
+import { LocationWithRadius } from '../../types/api.types';
 
 @Component({
   selector: 'app-map',
@@ -26,7 +27,7 @@ export class MapComponent implements OnInit {
 
   protected map: L.Map | undefined;
   private centroid: L.LatLngExpression = [39.82, -98.59]; // center of USA
-  protected lastLocation: { lat: number; lng: number; radius: number } | null = null;
+  protected lastLocation: LocationWithRadius | null = null;
 
   private initMap(): void {
     this.map = L.map('map', {
