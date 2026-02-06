@@ -7,6 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace API.Services;
 
+// Service to create JWT tokens for authenticated users
+// For production, will probably use something else
 public class TokenService(IConfiguration config) : ITokenService
 {
     public string CreateToken(AppUser user)

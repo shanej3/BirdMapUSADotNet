@@ -83,22 +83,18 @@ export class BirdsCard {
     const radius = this.mapService.radiusKm();
     
     // Refetch data with new radius
-    await this.mapService.fetchLocationData(
-      this.lastLocation()!.lat,
-      this.lastLocation()!.lng,
+    await this.mapService.fetchLocationData({
+      lat: this.lastLocation()!.lat,
+      lng: this.lastLocation()!.lng,
       radius
-    );
+    });
   }
 
   async toggleObservationType() {
     if (!this.lastLocation()) return;
     
     this.mapService.toggleObservationType();
-    await this.mapService.fetchBirdsOnly(
-      this.lastLocation()!.lat,
-      this.lastLocation()!.lng,
-      this.lastLocation()!.radius
-    );
+    await this.mapService.fetchBirdsOnly(this.lastLocation()!);
   }
 
   async toggleFavorite(code: string) {

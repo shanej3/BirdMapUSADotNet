@@ -32,7 +32,7 @@ namespace API.Controllers
                 );
 
                 // return the observations, assuming any are found
-                if (observations.Any())
+                if (observations.Count != 0)
                 {
                     return Ok(observations);
                 }

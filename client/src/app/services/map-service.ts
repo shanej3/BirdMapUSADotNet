@@ -3,7 +3,7 @@ import { EbirdService } from './ebird-service';
 import { RidbService } from './ridb-service';
 import { NwsService } from './nws-service';
 import { UserBirdsService } from './userbirds-service';
-import { BirdObservation, RecArea, WeatherForecast, LocationData } from '../../types/api.types';
+import { BirdObservation, RecArea, WeatherForecast, LocationData, LocationWithRadius } from '../../types/api.types';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +18,7 @@ export class MapService {
 
   birds = signal<BirdObservation[]>([]); 
   recAreas = signal<RecArea[]>([]);
-  locationData = signal<LocationData | null>(null);  // first NWS API call
+  locationData = signal<LocationData | null>(null);  // first NWS API call, can be null if call fails
   weatherData = signal<WeatherForecast[]>([]);  // second NWS API call
   observationType = signal<'recent' | 'notable'>('recent');  // track which type of observations to fetch
   radiusKm = signal<number>(50);  // search radius in kilometers (might convert to miles eventually)
@@ -43,13 +43,13 @@ export class MapService {
   });
 
   // Fetch all location data (birds, weather, recreation areas)
-  async fetchLocationData(lat: number, lng: number, radius: number) {
+  async fetchLocationData(location: LocationWithRadius) {
     const [birdData, recData, weatherData] = await Promise.allSettled([
       this.observationType() === 'recent' 
-        ? this.ebirdService.getNearbyBirds(lat, lng, radius)
-        : this.ebirdService.getNotableBirds(lat, lng, radius),
-      this.ridbService.getNearbyRecAreas(lat, lng, radius),
-      this.nwsService.getForecastData(lat, lng),
+        ? this.ebirdService.getNearbyBirds(location)
+        : this.ebirdService.getNotableBirds(location),
+      this.ridbService.getNearbyRecAreas(location),
+      this.nwsService.getForecastData(location.lat, location.lng),
     ]);
 
     this.birds.set(birdData.status === 'fulfilled' ? birdData.value as BirdObservation[] : []);
@@ -61,11 +61,11 @@ export class MapService {
   }
 
   // Fetch only bird data (for switching between recent/notable observations)
-  async fetchBirdsOnly(lat: number, lng: number, radius: number) {
+  async fetchBirdsOnly(location: LocationWithRadius) {
     try {
       const birdData = this.observationType() === 'recent'
-        ? await this.ebirdService.getNearbyBirds(lat, lng, radius)
-        : await this.ebirdService.getNotableBirds(lat, lng, radius);
+        ? await this.ebirdService.getNearbyBirds(location)
+        : await this.ebirdService.getNotableBirds(location);
       
       this.birds.set(birdData as BirdObservation[]);
     } catch (error) {

@@ -7,6 +7,8 @@ import { UserDto, LoginDto, RegisterDto } from '../../types/account.types';
 @Injectable({
   providedIn: 'root',
 })
+
+// service for handling user authentication and storing current user data (keeping them logged in across refreshes)
 export class AccountService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
@@ -39,7 +41,7 @@ export class AccountService {
     this.currentUser.set(user);
   }
 
-  // laad user from local storage 
+  // load user from local storage 
   loadUserFromStorage() {
     const userJson = localStorage.getItem('user');
     if (userJson) {

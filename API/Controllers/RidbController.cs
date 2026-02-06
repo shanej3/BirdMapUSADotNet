@@ -37,7 +37,7 @@ namespace API.Controllers
                 );
 
                 // // return the recareas, assuming any are found
-                if (recAreas.Any())
+                if (recAreas.Count != 0)
                 {
                     return Ok(recAreas);
                 }

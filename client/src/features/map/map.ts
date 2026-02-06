@@ -60,7 +60,7 @@ export class MapComponent implements OnInit {
     this.mapMarkersService.createCircle(lat, lng, radius, this.map!);
 
     // Fetch all data
-    await this.mapService.fetchLocationData(lat, lng, radius);
+    await this.mapService.fetchLocationData(this.lastLocation);
     await this.userBirdsService.GetUserBirds(this.accountService.currentUser()?.id || '');
 
     // Add recreation area markers
