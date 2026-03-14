@@ -16,7 +16,7 @@ import { BirdObservation, LocationWithRadius } from '../../types/api.types';
 // allows user to set a bird as favorite, found, or want to see and filter the list with those flags
 
 export class BirdsCard {
-  birds = input<BirdObservation[]>([]);
+  birds = input<BirdObservation[]>([]);  // input = readonly signal 
   lastLocation = input<LocationWithRadius | null>(null);
   
   private userBirdsService = inject(UserBirdsService);
@@ -90,6 +90,7 @@ export class BirdsCard {
     });
   }
 
+  // Toggle between showing all observations and only birds (notable observations)
   async toggleObservationType() {
     if (!this.lastLocation()) return;
     

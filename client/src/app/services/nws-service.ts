@@ -20,7 +20,7 @@ export class NwsService {
         lng: String(lng)
       }
     });
-    return firstValueFrom(res) as Promise<LocationData>;
+    return firstValueFrom(res) as Promise<LocationData>;  
   }
 
   async getForecastData(lat: number, lng: number): Promise<{ locationData: LocationData; forecastData: WeatherForecast[] }> {

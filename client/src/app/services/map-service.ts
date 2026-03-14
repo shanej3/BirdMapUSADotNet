@@ -45,13 +45,14 @@ export class MapService {
   // Fetch all location data (birds, weather, recreation areas)
   async fetchLocationData(location: LocationWithRadius) {
     const [birdData, recData, weatherData] = await Promise.allSettled([
-      this.observationType() === 'recent' 
+      this.observationType() === 'recent' // if observation type is recent, fetch nearby birds, otherwise fetch notable birds
         ? this.ebirdService.getNearbyBirds(location)
         : this.ebirdService.getNotableBirds(location),
       this.ridbService.getNearbyRecAreas(location),
       this.nwsService.getForecastData(location.lat, location.lng),
     ]);
 
+    // Update signals with fetched data, checking if each API call was successful
     this.birds.set(birdData.status === 'fulfilled' ? birdData.value as BirdObservation[] : []);
     this.recAreas.set(recData.status === 'fulfilled' ? recData.value as RecArea[] : []);
     this.locationData.set(

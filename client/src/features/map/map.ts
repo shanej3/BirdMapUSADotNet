@@ -29,7 +29,7 @@ export class MapComponent implements OnInit {
   private centroid: L.LatLngExpression = [39.82, -98.59]; // center of USA
   protected lastLocation: LocationWithRadius | null = null;
 
-  private initMap(): void {
+  private initMap(): void {  // Initialize Leaflet map
     this.map = L.map('map', {
       center: this.centroid,
       zoom: 5,
@@ -44,7 +44,7 @@ export class MapComponent implements OnInit {
     tiles.addTo(this.map);
   }
 
-  private async onMapClick(e: L.LeafletMouseEvent) {
+  private async onMapClick(e: L.LeafletMouseEvent) {  // Handle map click event
     const { lat, lng } = e.latlng;
     const radius = this.mapService.radiusKm();
 
@@ -97,6 +97,7 @@ export class MapComponent implements OnInit {
   }
 
   private centerMap(lat: number, lng: number): void {
+    // Centers map when user clicks on new location
     this.centroid = [lat, lng];
     this.map?.setView(this.centroid);
   }

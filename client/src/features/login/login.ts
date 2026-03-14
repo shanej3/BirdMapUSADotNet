@@ -8,12 +8,13 @@ import { AccountService } from '../../app/services/account-service';
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
+// Component for user login and registration, displayed as modal
 export class Login {
-  private fb = inject(FormBuilder);
+  private fb = inject(FormBuilder);  // FormBuilder for creating reactive forms
   accountService = inject(AccountService);
   
   isOpen = signal(false);
-  isRegisterMode = signal(false);
+  isRegisterMode = signal(false);  // false = login mode, true = registration mode
   errorMessage = signal<string | null>(null);
 
   loginForm = this.fb.group({
@@ -27,7 +28,7 @@ export class Login {
     this.isRegisterMode.set(false);
   }
 
-  toggleMode() {
+  toggleMode() {  // Toggle between login and registration mode
     this.isRegisterMode.set(!this.isRegisterMode());
     this.errorMessage.set(null);
   }
@@ -38,7 +39,7 @@ export class Login {
     try {
       const credentials = this.loginForm.value as { userName: string; password: string };
       
-      if (this.isRegisterMode()) {
+      if (this.isRegisterMode()) {  // If in registration mode, call register method, otherwise call login method
         await this.accountService.register(credentials);
       } else {
         await this.accountService.login(credentials);
